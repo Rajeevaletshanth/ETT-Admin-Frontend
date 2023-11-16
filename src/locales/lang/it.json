@@ -1,0 +1,11 @@
+{
+    "nav": {
+        "apps": "Apps",
+        "home": "Casa",
+        "leads": "Leads",
+        "verification": "Verifiche",
+        "user_requests": "Richieste Utente",
+        "create_lead": "Aggiungi Lead",
+        "manage_lead": "Gestire i Lead"
+    }
+}

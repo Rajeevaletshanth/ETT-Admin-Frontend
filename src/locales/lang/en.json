@@ -1,0 +1,12 @@
+{
+    "nav": {
+        "apps": "Apps",
+        "home": "Home",
+        "leads": "Leads",
+        "verification": "Verifications",
+        "user_requests": "User Requests",
+        "restaurant" : "Restaurant",
+        "create_lead": "Create Lead",
+        "manage_lead": "Manage Leads"
+    }
+}
