@@ -12,13 +12,13 @@ import isEmpty from 'lodash/isEmpty'
 import { Loading } from 'components/shared'
 import { useSelector } from 'react-redux'
 import { getAllCards, detachCard, attachCard, changePrimaryCard } from 'services/PaymentServices'
+import useUserRole from 'services/TableCheck'
 // import { apiGetAccountSettingBillingData } from 'services/AccountServices'
 
-const months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
 const Billing = () => {
-
 
 	const [data, setData] = useState({})
 	const [selectedCard, setSelectedCard] = useState({})
@@ -30,39 +30,46 @@ const Billing = () => {
 	const [loading, setLoading] = useState(true);
 	const [updatingCard, setUpdatingCard] = useState(false);
 	const [removingCard, setRemovingCard] = useState(false);
-	
+
 	const admin_id = useSelector((state) => state.auth.user.id)
 	const username = useSelector((state) => state.auth.user.username)
 	const email = useSelector((state) => state.auth.user.email)
 
+	const authTable = useUserRole();
+	const aid = `${authTable}${admin_id}`;
 	const fetchData = async () => {
-		const response = await getAllCards(admin_id)
-		if(response.data){
-			let cardList = [];
-			if(response.data.response === "success"){
-				response.data.cards?.map((item, key) => {
-					cardList[key] = {
-						cardHolderName: item.card_holder_name,
-						cardId: item.card_id,
-						cardType: item.card_type,
-						expMonth: item.exp_month,
-						expYear: item.exp_year,
-						last4Number: item.last_four_digits,
-						primary: item.primary_card
-					}
-				})
+		try {
+			const response = await getAllCards(aid)
+			if (response.data) {
+				let cardList = [];
+				if (response.data.response === "success") {
+					response.data.cards?.map((item, key) => {
+						cardList[key] = {
+							cardHolderName: item.card_holder_name,
+							cardId: item.card_id,
+							cardType: item.card_type,
+							expMonth: item.exp_month,
+							expYear: item.exp_year,
+							last4Number: item.last_four_digits,
+							primary: item.primary_card
+						}
+					})
+				}
+				setData({ paymentMethods: cardList });
+				setLoading(false);
 			}
-			setData({paymentMethods : cardList});
-			setLoading(false);
+		} catch (error) {
+
 		}
+
 	}
 
 	const onFormSubmit = (_, setSubmitting) => {
 		toast.push(
 			<Notification title={"Billing information updated"} type="success" />
-		,{
-			placement: 'top-center'
-		})
+			, {
+				placement: 'top-center'
+			})
 		setSubmitting(false)
 	}
 
@@ -71,58 +78,57 @@ const Billing = () => {
 		setSelectedCard({})
 	}
 
-	const onSetPrimaryCard = async(card) => {
-		let data = {card_id: card.cardId}
-		const response = await changePrimaryCard(admin_id, data);
-		if(response.data){
-			if(response.data.response === "success"){
+	const onSetPrimaryCard = async (card) => {
+		let data = { card_id: card.cardId }
+		const response = await changePrimaryCard(aid, data);
+		if (response.data) {
+			if (response.data.response === "success") {
 				toast.push(
 					<Notification title={response.data.response.charAt(0).toUpperCase() + response.data.response.slice(1)} type={'success'}>
 						{response.data.message}
 					</Notification>
 				)
-			}else{
+			} else {
 				toast.push(
 					<Notification title={response.data.response.charAt(0).toUpperCase() + response.data.response.slice(1)} type={'danger'}>
 						{response.data.message}
 					</Notification>
-				)				
+				)
 			}
 			fetchData()
 		}
 	}
 
-	const onRemoveCreditCard = async(card) => {
+	const onRemoveCreditCard = async (card) => {
 		setRemovingCard(true)
-		let data = {card_id: card.cardId}
-		const response = await detachCard(admin_id, data);
-		if(response.data){
-			if(response.data.response === "success"){
+		let data = { card_id: card.cardId }
+		const response = await detachCard(aid, data);
+		if (response.data) {
+			if (response.data.response === "success") {
 				toast.push(
 					<Notification title={response.data.response.charAt(0).toUpperCase() + response.data.response.slice(1)} type={'success'}>
 						{response.data.message}
 					</Notification>
 				)
-			}else{
+			} else {
 				toast.push(
 					<Notification title={response.data.response.charAt(0).toUpperCase() + response.data.response.slice(1)} type={'danger'}>
 						{response.data.message}
 					</Notification>
-				)				
+				)
 			}
 			setRemovingCard(false)
 			fetchData()
 		}
 	}
-	
+
 
 	const onEditCreditCard = (card, type) => {
 		setCcDialogType(type)
 		setSelectedCard(card)
 	}
 
-	const onCardUpdate = async(cardValue, form, field) => {
-		console.log(cardValue)
+	const onCardUpdate = async (cardValue, form, field) => {
 		setErrorMsg("");
 		setUpdatingCard(true);
 		let card_data = {
@@ -140,9 +146,9 @@ const Billing = () => {
 			primary_card: cardValue.primary
 		}
 
-		const response = await attachCard(admin_id, card_data);
-		if(response.data){
-			if(response.data.response === "success"){
+		const response = await attachCard(aid, card_data);
+		if (response.data) {
+			if (response.data.response === "success") {
 				fetchData();
 				onCreditCardDialogClose()
 				toast.push(
@@ -150,7 +156,7 @@ const Billing = () => {
 						Card Added Successfully
 					</Notification>
 				)
-			}else{
+			} else {
 				setErrorMsg("Invalid Card Details")
 			}
 			setUpdatingCard(false);
@@ -172,40 +178,40 @@ const Billing = () => {
 		<Formik
 			initialValues={data}
 			enableReinitialize
-			// onSubmit={(values, { setSubmitting }) => {
-				// setSubmitting(true)
-				// setTimeout(() => {
-        //   console.log(values, "Valuess")
-			// 		onFormSubmit(setSubmitting)
-			// 	}, 1000)
-			// }}
+		// onSubmit={(values, { setSubmitting }) => {
+		// setSubmitting(true)
+		// setTimeout(() => {
+		//   console.log(values, "Valuess")
+		// 		onFormSubmit(setSubmitting)
+		// 	}, 1000)
+		// }}
 		>
-			{({values, touched, errors, isSubmitting, resetForm}) => {
-				const validatorProps = {touched, errors}
+			{({ values, touched, errors, isSubmitting, resetForm }) => {
+				const validatorProps = { touched, errors }
 				return (
 					<Form>
 						<FormContainer>
-							<FormDesription 
+							<FormDesription
 								title="Payment Method"
 								desc="You can update your cards information here"
 							/>
 							<Loading loading={loading}>
 								<FormRow name="paymentMethods" alignCenter={false} label="Credit Cards" {...validatorProps} >
 									<div className="rounded-lg border border-gray-200 dark:border-gray-600">
-										{values?.paymentMethods?.length === 0?  
+										{values?.paymentMethods?.length === 0 ?
 											<div className="flex items-center">
 												<div className="ml-3 rtl:mr-3">
-														<div className="flex items-center">
-															<div className="text-gray-200 dark:text-gray-100 font-semibold">
-																No Cards Added Yet.
-															</div>
+													<div className="flex items-center">
+														<div className="text-gray-200 dark:text-gray-100 font-semibold">
+															No Cards Added Yet.
 														</div>
+													</div>
 												</div>
 											</div>
-										: ""}
+											: ""}
 										{values?.paymentMethods?.map((card, index) => (
-											<div 
-												key={card.cardId} 
+											<div
+												key={card.cardId}
 												className={classNames(
 													'flex items-center justify-between p-4',
 													!isLastChild(values.paymentMethods, index) && 'border-b border-gray-200 dark:border-gray-600'
@@ -227,24 +233,24 @@ const Billing = () => {
 																</Tag>
 															)}
 														</div>
-														<span>Expired {months[parseInt(card.expMonth) - 1]} 20{card.expYear}</span>
+														<span> {months[parseInt(card.expMonth) - 1]} 20{card.expYear}</span>
 													</div>
 												</div>
 												<div className="">
 													{!card.primary &&
+														<Button
+															size="xs"
+															onClick={() => onSetPrimaryCard(card)}
+															type="button"
+															className="mr-2 mb-2"
+														>
+															Set Primary
+														</Button>}
 													<Button
-														size="xs" 
-														onClick={() => onSetPrimaryCard(card)}
-														type="button"
-														className="mr-2 mb-2"
-													>
-														Set Primary
-													</Button>}
-													<Button
-														size="xs" 
+														size="xs"
 														onClick={() => onRemoveCreditCard(card)}
 														type="button"
-														variant="solid" 
+														variant="solid"
 														color="red-600"
 													>
 														Remove
@@ -254,10 +260,10 @@ const Billing = () => {
 										))}
 									</div>
 									<div className="mt-2">
-										<Button 
-											type="button" 
-											variant="plain" 
-											size="sm" 
+										<Button
+											type="button"
+											variant="plain"
+											size="sm"
 											icon={<HiPlus className="text-lg" />}
 											onClick={() => onEditCreditCard({}, 'NEW')}
 										>
@@ -278,11 +284,11 @@ const Billing = () => {
 										return (
 											<CreditCardForm
 												type={ccDialogType}
-												card={selectedCard} 
-												onUpdate={cardValue => onCardUpdate(cardValue, form, field)} 
+												card={selectedCard}
+												onUpdate={cardValue => onCardUpdate(cardValue, form, field)}
 												loading={updatingCard}
 											/>
-										) 
+										)
 									}}
 								</Field>
 							</Dialog>
@@ -297,9 +303,9 @@ const Billing = () => {
 								title="Billing History"
 								desc="View your previos billing"
 							/>
-							<BillingHistory 
-								className="mt-4 rounded-lg border border-gray-200 dark:border-gray-600" 
-								data={data.billingHistory} 
+							<BillingHistory
+								className="mt-4 rounded-lg border border-gray-200 dark:border-gray-600"
+								data={data.billingHistory}
 							/>
 						</FormContainer>
 					</Form>

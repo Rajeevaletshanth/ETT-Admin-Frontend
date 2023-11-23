@@ -6,6 +6,29 @@
         "verification": "Verifiche",
         "user_requests": "Richieste Utente",
         "create_lead": "Aggiungi Lead",
-        "manage_lead": "Gestire i Lead"
+        "manage_lead": "Gestire i Lead",
+        "account": "Account",
+        "profile": "Profilo",
+        "settings": "Impostazioni",
+        "products" : {
+            "products": "Prodotti",
+            "fixed_departure": "Partenza Fissa",
+            "van_tours": "Tour in Furgone",
+            "vip": "VIP",
+            "fit": "FIT",
+            "mice": "MICE",
+            "tour_packages" : "Pacchetti Turistici",
+            "hotel": "Hotel",
+            "apartments": "Appartamenti",
+            "transport": "Trasporto"
+        },
+        "quotation": "Quotazione",
+        "agents": "Agenti",
+        "supplier": "Fornitrice",
+        "client": "B2C Cliente",
+        "additional_info": "Informazioni Addizionali",
+        "my_bookings": "Le mie Prenotazioni",
+        "offers": "Offerte",
+        "contact_us": "Contattaci"
     }
 }

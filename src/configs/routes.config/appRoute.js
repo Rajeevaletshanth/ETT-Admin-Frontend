@@ -20,7 +20,54 @@ const appRoute = [
         component: React.lazy(() => import('views/account/settings')),
         authority: [],
     },
-    
+    {
+        key: 'quotation',
+        path: '/quotation',
+        component: React.lazy(() => import('views/quotation')),
+        authority: [],
+    },
+    {
+        key: 'agents',
+        path: '/agents',
+        component: React.lazy(() => import('views/agents')),
+        authority: [],
+    },
+    {
+        key: 'supplier',
+        path: '/supplier',
+        component: React.lazy(() => import('views/supplier')),
+        authority: [],
+    },
+    {
+        key: 'client',
+        path: '/client',
+        component: React.lazy(() => import('views/b2cClients')),
+        authority: [],
+    },
+    {
+        key: 'additional_info',
+        path: '/additional_info',
+        component: React.lazy(() => import('views/additionalInfo')),
+        authority: [],
+    },
+    {
+        key: 'my_bookings',
+        path: '/my_bookings',
+        component: React.lazy(() => import('views/myBookings')),
+        authority: [],
+    },
+    {
+        key: 'offers',
+        path: '/offers',
+        component: React.lazy(() => import('views/offers')),
+        authority: [],
+    },
+    {
+        key: 'contact_us',
+        path: '/contact_us',
+        component: React.lazy(() => import('views/contactUs')),
+        authority: [],
+    },
 ]
 
 export default appRoute

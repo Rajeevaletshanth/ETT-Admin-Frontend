@@ -6,6 +6,8 @@ import isEmpty from 'lodash/isEmpty'
 import { useSelector, useDispatch } from 'react-redux'
 import { getAdminDet } from 'services/AccountServices'
 import useAuth from 'utils/hooks/useAuth'
+import checkTable from 'services/TableCheck'
+import useUserRole from 'services/TableCheck'
 
 const Profile = lazy(() => import('./components/Profile'))
 const Password = lazy(() => import('./components/Password'))
@@ -30,7 +32,7 @@ const Settings = () => {
 
 	const location = useLocation()
 
-  const { id } = useSelector((state) => state.auth.user)
+  const { id, authority } = useSelector((state) => state.auth.user)
 
 	const path = location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
 
@@ -39,18 +41,24 @@ const Settings = () => {
 		navigate(`/app/account/settings/${val}`)
 	}
 
+	const authTable = useUserRole();
+
 	const fetchData = async () => {
-    await checkAuthenticate();
-		const response = await getAdminDet(id)
-		setData({
-			id: response.data.admin[0].id,
-			username: response.data.admin[0].username,
-			email: response.data.admin[0].email,
-			authority: response.data.admin[0].authority,
-			address: response.data.admin[0].address,
-			phone_no: response.data.admin[0].phone_no,
-			avatar: response.data.admin[0].avatar
-		})
+		try{
+			await checkAuthenticate();
+			const response = await getAdminDet(id, authTable)
+			setData({
+				id: response.data.admin[0].id,
+				username: response.data.admin[0].username,
+				email: response.data.admin[0].email,
+				authority: response.data.admin[0].authority,
+				address: response.data.admin[0].address,
+				phone_no: response.data.admin[0].phone_no,
+				avatar: response.data.admin[0].avatar
+			})
+		}catch(err){
+			setData({})
+		}
 	}
 
 	useEffect(() => {

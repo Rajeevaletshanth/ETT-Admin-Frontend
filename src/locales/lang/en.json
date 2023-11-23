@@ -5,8 +5,30 @@
         "leads": "Leads",
         "verification": "Verifications",
         "user_requests": "User Requests",
-        "restaurant" : "Restaurant",
         "create_lead": "Create Lead",
-        "manage_lead": "Manage Leads"
+        "manage_lead": "Manage Leads",
+        "account": "Account",
+        "profile": "Profile",
+        "settings": "Settings",
+        "products" : {
+            "products": "Products",
+            "fixed_departure": "Fixed Departure",
+            "van_tours": "Van Tours",
+            "vip": "VIP",
+            "fit": "FIT",
+            "mice": "MICE",
+            "tour_packages" : "Tour Packages",
+            "hotel": "Hotel",
+            "apartments": "Apartments",
+            "transport": "Transport"
+        },
+        "quotation": "Quotation",
+        "agents": "Agents",
+        "supplier": "Supplier",
+        "client": "B2C Client",
+        "additional_info": "Additional Info",
+        "my_bookings": "My Bookings",
+        "offers": "Offers",
+        "contact_us": "Contact Us"
     }
 }

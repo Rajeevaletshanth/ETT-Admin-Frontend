@@ -30,6 +30,7 @@ import { useDispatch } from 'react-redux'
 import { setUser } from 'store/auth/userSlice'
 import { editAdminDet } from 'services/AccountServices'
 import { getAvatar, uploadFile } from 'services/ApiService'
+import useUserRole from 'services/TableCheck'
 
 
 const { Control } = components
@@ -85,7 +86,7 @@ const uploadProfile = async(file) => {
 
 const Profile = ({data}) => {
     const dispatch = useDispatch()
-
+    const authTable = useUserRole();
     const [avatarFile, setAvatarFile] = useState([]);
     const [profileImg, setProfileImg] = useState("");
 
@@ -121,7 +122,7 @@ const Profile = ({data}) => {
                     phone_no: values.phone_no,
                     avatar : image
                 }
-                const response = await editAdminDet(values.id, formData);
+                const response = await editAdminDet(values.id, formData, authTable);
                 if(response.data){
                     if(response.data.response === "success"){
                         dispatch(setUser({

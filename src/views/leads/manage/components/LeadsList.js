@@ -4,6 +4,7 @@ import { useTable, usePagination, useSortBy, useFilters, useGlobalFilter, useAsy
 import  { matchSorter } from 'match-sorter'
 import { HiPencilAlt, HiOutlineTrash } from 'react-icons/hi'
 import EditLead from './EditLead'
+import { useSelector } from 'react-redux'
 
 
 const columns = [
@@ -95,6 +96,8 @@ const LeadsList = props => {
     const [isOpen, setIsOpen] = useState(false)
     const [editId, setEditId] = useState(); 
     const [editData, setEditData] = useState(); 
+
+	const authority = useSelector((state) => state.auth.user.authority);
 
 	const openDrawer = (data) => {
         // console.log(JSON.parse(data))
@@ -211,7 +214,7 @@ const LeadsList = props => {
                                     }else if(cell.column.id === "is_deleted"){
                                         return <Td {...cell.getCellProps()}><Tag className={!cell.value? "text-white bg-green-600 border-0" : "text-white bg-red-600 border-0"}> {!cell.value? "Active" : "Suspended"} </Tag> </Td>
                                     }else if(cell.column.Header === "Action"){
-                                        return <Td {...cell.getCellProps()}> <Button size="xs"  variant="solid" color="yellow-600" id={cell.row.original.id} data-details={JSON.stringify(cell.row.original)} onClick={editLead}> Edit </Button></Td> 
+                                        return <Td {...cell.getCellProps()}> <Button size="xs" disabled={JSON.parse(row.original.authority).role.includes('superadmin')} variant="solid" color={JSON.parse(row.original.authority).role.includes('superadmin')?"gray-200" : "yellow-600"} id={cell.row.original.id} data-details={JSON.stringify(cell.row.original)} onClick={editLead}> Edit </Button></Td> 
                                     }else{
                                         return <Td {...cell.getCellProps()}>{cell.render('Cell')}</Td>
                                     }									

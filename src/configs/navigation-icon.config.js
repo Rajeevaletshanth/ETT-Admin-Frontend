@@ -10,8 +10,17 @@ import {
     HiTemplate,
     HiOutlineUserAdd,
     HiOutlineUserGroup,
-    HiShieldCheck
-} from 'react-icons/hi'
+    HiShieldCheck,
+    HiOutlineViewGrid,
+    HiOutlineClipboardCheck,
+    HiOutlineUser,  
+    HiOutlineTruck  ,
+    HiUser,
+    HiTicket,
+    HiInformationCircle,
+    HiTag,
+    HiPhone
+} from 'react-icons/hi';
 
 const navigationIcon = {
     home: <HiOutlineHome />,
@@ -20,7 +29,16 @@ const navigationIcon = {
     apps: <HiTemplate />,
     add_user: <HiOutlineUserAdd />,
     users: <HiOutlineUserGroup />,
-    verify: <HiShieldCheck />
+    verify: <HiShieldCheck />,
+    products: <HiOutlineViewGrid />,
+    quotation: <HiOutlineClipboardCheck  />,
+    agents: <HiUser />,
+    supplier: <HiOutlineTruck />,
+    client: <HiOutlineUser />,
+    info: <HiInformationCircle />,
+    booking: <HiTicket />,
+    offers: <HiTag />,
+    contact: <HiPhone />
 }
 
 export default navigationIcon

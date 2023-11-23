@@ -147,3 +147,17 @@ export async function verifyUser (id) {
         })
     })
 }
+
+export async function resetLeadPassword (email) {
+    return new Promise((resole, reject) => {
+        axios.post(`${config.SERVER_URL}/superadmin/lead_reset_password`, { "email" : email },
+        {headers: {
+                'Authorization': `Bearer ${getAccessToken()}`
+            }
+        }).then((res) => {                           
+            resole(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
