@@ -2,9 +2,9 @@ import axios from 'axios';
 import config from '../configs/config.json';
 import getAccessToken from './AccessToken';
 
-export async function changePassword (id, data) {
+export async function changePassword (id, data, user = 'admin') {
     return new Promise((resolve, reject) => {
-        axios.put(`${config.SERVER_URL}/admin/change_password/${id}`, data,
+        axios.put(`${config.SERVER_URL}/${user}/change_password/${id}`, data,
         {headers: {
                 'Authorization': `Bearer ${getAccessToken()}`
             }
@@ -16,9 +16,9 @@ export async function changePassword (id, data) {
     })
 }
 
-export async function getAdminDet (id) {
+export async function getAdminDet (id, user = 'admin') {
     return new Promise((resolve, reject) => {
-        axios.get(`${config.SERVER_URL}/admin/${id}`, 
+        axios.get(`${config.SERVER_URL}/${user}/${id}`, 
         {headers: {
                 'Authorization': `Bearer ${getAccessToken()}`
             }
@@ -30,9 +30,9 @@ export async function getAdminDet (id) {
     }) 
 }
 
-export async function editAdminDet (id, data) {
+export async function editAdminDet (id, data, user = 'admin') {
     return new Promise((resolve, reject) => {
-        axios.put(`${config.SERVER_URL}/admin/edit/${id}`, data,
+        axios.put(`${config.SERVER_URL}/${user}/edit/${id}`, data,
         {headers: {
                 'Authorization': `Bearer ${getAccessToken()}`
             }

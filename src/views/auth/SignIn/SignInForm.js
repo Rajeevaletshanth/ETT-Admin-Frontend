@@ -17,6 +17,7 @@ const SignInForm = props => {
 	const { 
 		disableSubmit = false, 
 		className, 
+		isAdmin,
 		forgotPasswordUrl = '/forgot-password',
 		signUpUrl = '/sign-up',
 	} = props
@@ -29,7 +30,7 @@ const SignInForm = props => {
 		const { email, password, rememberMe } = values
 		setSubmitting(true)
 		
-		const result = await signIn({ email, password, signedIn: rememberMe })
+		const result = await signIn({ email, password, signedIn: rememberMe,  user : isAdmin? 'admin' : 'moderator'})
 
 		if (result.status === 'failed') {
 			setMessage(result.message)
@@ -40,7 +41,9 @@ const SignInForm = props => {
 
 	return (
 		<div className={className}>
-			{message && <Alert className="mb-4" type="danger" showIcon>{message}</Alert>}
+			{message && <Alert className="mb-2" type="danger" showIcon>{message}</Alert>}
+			
+			<div className='mb-2' />
 			<Formik
 				initialValues={{
 					email: '', 

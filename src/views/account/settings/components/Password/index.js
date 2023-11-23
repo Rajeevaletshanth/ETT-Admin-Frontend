@@ -15,6 +15,7 @@ import isLastChild from 'utils/isLastChild'
 import dayjs from 'dayjs'
 import * as Yup from 'yup'
 import { changePassword } from 'services/AccountServices'
+import useUserRole from 'services/TableCheck'
 
 
 const validationSchema = Yup.object().shape({
@@ -24,13 +25,13 @@ const validationSchema = Yup.object().shape({
 })
 
 const Password = ({ data }) => {
-
+    const authTable = useUserRole();
 	const onFormSubmit = async(values, setSubmitting) => {
     if(values.password === values.newPassword){
       toast.push(<Notification title={"Your current password and new password cannot be same!"} type="danger" />,{placement: 'top-center'})
       setSubmitting(false)
     }else{
-      const response = await changePassword(data.id, { currentPassword: values.password, newPassword: values.newPassword })
+      const response = await changePassword(data.id, { currentPassword: values.password, newPassword: values.newPassword }, authTable)
       if(response.data){
         if(response.data.response === "success"){
           toast.push(<Notification title={"Password updated"} type="success" />,{placement: 'top-center'})

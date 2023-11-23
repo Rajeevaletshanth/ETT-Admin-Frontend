@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { setUser, initialState } from 'store/auth/userSlice'
-import { apiSignIn, apiSignOut } from 'services/AuthService'
+import { apiSignIn } from 'services/AuthService'
 import { authenticate } from'services/ApiService'
 import { onSignInSuccess, onSignOutSuccess } from 'store/auth/sessionSlice'
 import appConfig from 'configs/app.config'
@@ -18,9 +18,9 @@ function useAuth() {
 
     const { token, signedIn } = useSelector((state) => state.auth.session)
 
-    const signIn = async ({ email, password, signedIn }) => {
+    const signIn = async ({ email, password, signedIn, user = 'admin' }) => {
         try {
-			const resp = await apiSignIn({ email, password, signedIn })
+			const resp = await apiSignIn({ email, password, signedIn }, user)
 			if (resp.data.isLoggedIn) {
 				const { token } = resp.data
 				dispatch(onSignInSuccess(token))

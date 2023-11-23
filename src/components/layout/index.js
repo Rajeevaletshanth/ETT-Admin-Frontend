@@ -1,4 +1,4 @@
-import React, { memo, useMemo, lazy, Suspense, useEffect } from 'react'
+import React, { memo, useMemo, lazy, Suspense, useEffect, useCallback, useState } from 'react'
 import { Loading } from 'components/shared'
 import { useSelector } from 'react-redux'
 import { 
@@ -12,6 +12,7 @@ import {
 import useAuth from 'utils/hooks/useAuth'
 import useDirection from 'utils/hooks/useDirection'
 import useLocale from 'utils/hooks/useLocale'
+import { useLocation } from 'react-router-dom'
 
 const layouts = {
 	[LAYOUT_TYPE_CLASSIC]: lazy(() => import('./ClassicLayout')),
@@ -28,18 +29,29 @@ const Layout = () => {
 
 	const { authenticated } = useAuth()
 
+	const location = useLocation()
+	const [counter, setCounter] = useState(0)
+
 	useDirection()
 
 	useLocale()
 
 	//Check Auth
 	const { checkAuthenticate } = useAuth()
-	const checkAuth = async() => {
-		await checkAuthenticate();
-	}
+
+	const checkAuth = useCallback(async() => {
+		if(location.pathname.split('/')[1] !== "reset_password"){
+			await checkAuthenticate()
+		}
+	},[location, checkAuthenticate])
+
 	useEffect(() => {
-		checkAuth();
-	}, [])
+		if(counter === 0){
+			checkAuth();
+			setCounter(1)
+		}
+		
+	}, [counter, checkAuth])
 	//End check Auth
 
 	const AppLayout = useMemo(() => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Avatar } from 'components/ui'
-import { getAvatar } from 'services/ApiService'
+import { getAvatar, resetLeadPassword } from 'services/ApiService'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { Field, Form, Formik } from 'formik'
 import { 
@@ -41,7 +41,7 @@ const validationSchema = Yup.object().shape({
 
 const EditLead = ({ data }) => {
     const dispatch = useDispatch()
-
+    
     const [profileImg, setProfileImg] = useState("");
 
     const [roles, setRoles] = useState([]);
@@ -50,7 +50,7 @@ const EditLead = ({ data }) => {
 	const [successMessage, setSuccessMessage] = useTimeOutMessage()
 
     const userEmail = useSelector((state) => state.auth.user.email)
-    
+
     const handleRole = (option) => {
 		setRoles([]);
 		option.map((item) => {
@@ -88,6 +88,19 @@ const EditLead = ({ data }) => {
       })
       return roleArr;
     }   
+
+	const resetPassword = async() => {
+		try {
+			const response = await resetLeadPassword(data.email)
+			if(response.response === "success"){
+				setSuccessMessage('Password reset successful');
+			}else{
+				setErrorMessage(response.message);
+			}
+		} catch (error) {
+			setErrorMessage(error.message);
+		}
+	}
 
     
 
@@ -244,9 +257,10 @@ const EditLead = ({ data }) => {
 								
 								<FormItem>
 									<Button type="reset" className="ltr:mr-2 rtl:ml-2" onClick={resetForm} disabled={userEmail === values.email? true: false}>Reset</Button>
-									<Button variant="solid" type="submit" color="gray-800" loading={isSubmitting} disabled={userEmail === values.email? true: false}>
+									<Button variant="solid" type="submit" color="red-800" loading={isSubmitting} disabled={userEmail === values.email? true: false}>
 										{ isSubmitting ? 'Updating...' : 'Update' }
 									</Button>
+									<Button type="reset" size="sm" variant="solid" color="gray-500" className="ltr:mr-2 rtl:ml-2 mt-4" onClick={resetPassword}>Reset Password</Button>
 								</FormItem>
 							</FormContainer>
 						</Form>

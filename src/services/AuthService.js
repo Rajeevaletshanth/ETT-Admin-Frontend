@@ -2,15 +2,15 @@ import {ApiService} from './ApiService';
 import axios from 'axios';
 import config from '../configs/config.json';
 
-export async function apiSignIn (data) {
+export async function apiSignIn (data, user = "admin") {
     return axios.post(
-        `${config.SERVER_URL}/admin/login`, data
+        `${config.SERVER_URL}/${user}/login`, data
     )
 }
 
-export async function apiSignUp (data) {
+export async function apiSignUp (data, user = "admin") {
     return axios.post(
-        `${config.SERVER_URL}/admin/register`, data
+        `${config.SERVER_URL}/${user}/register`, data
     )
 }
 
@@ -22,15 +22,15 @@ export async function apiSignOut (data) {
     })
 }
 
-export async function apiForgotPassword (data) {
+export async function apiForgotPassword (data, user = "moderator") {
     return axios.post(
-        `${config.SERVER_URL}/admin/forgot_password`, data
+        `${config.SERVER_URL}/${user}/forgot_password`, data
     )
 }
 
-export async function apiResetPassword (id, token, password) {
+export async function apiResetPassword (id, token, password, user = "moderator") {
     return axios.post(
-        `${config.SERVER_URL}/admin/reset_password/${id}/${token}`, { password }
+        `${config.SERVER_URL}/${user}/reset_password/${id}/${token}`, { password }
     )
 }
 

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Input, Button, FormItem, FormContainer, Alert, Select } from 'components/ui'
 import { PasswordInput, ActionLink } from 'components/shared'
-import { onSignInSuccess } from 'store/auth/sessionSlice'
-import { setUser } from 'store/auth/userSlice'
+// import { onSignInSuccess } from 'store/auth/sessionSlice'
+// import { setUser } from 'store/auth/userSlice'
 import { apiSignUp } from 'services/AuthService'
 import { uploadFile } from 'services/ApiService'
 import appConfig from 'configs/app.config'
 import useTimeOutMessage from 'utils/hooks/useTimeOutMessage'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+// import { useDispatch } from 'react-redux'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 
@@ -26,7 +26,7 @@ const validationSchema = Yup.object().shape({
 })
 
 const roleOptions = [
-	{ value: 'user' , label: 'User'},
+	{ value: 'client' , label: 'B2C Client'},
 	{ value: 'agent' , label: 'Agent'},
 	{ value: 'supplier' , label: 'Supplier'}
 ]
@@ -79,10 +79,10 @@ const SignUpForm = props => {
 		setSubmitting(true)		
 		try {
 			let profile = await getAvatar();
-			const resp = await apiSignUp({ username, address, authority : {"role" : [role.value]}, phone_no, email, password, avatar: profile })
+			const resp = await apiSignUp({ username, address, authority : {"role" : [role.value]}, phone_no, email, password, avatar: profile }, 'moderator')
 			if (resp.data) {
 				setSubmitting(false)
-				if(resp.data.response == "success"){
+				if(resp.data.response === "success"){
 					setSuccessMessage('Successfully Registered. Please login to continue.')
 					setTimeout(() => {
 						navigate(appConfig.unAuthenticatedEntryPath)
@@ -99,11 +99,9 @@ const SignUpForm = props => {
 
 	return (
 		<div className={className}>
-			{errorMessage && <Alert className="mb-4" type="danger"  showIcon>{errorMessage}</Alert>}
-			{successMessage && <Alert className="mb-4" type="success"  showIcon>{successMessage}</Alert>}
 			<Formik
 				initialValues={{
-					role: {value: 'user', label: 'User' },
+					role: roleOptions[0],
 					username: '', 
 					address: '',
 					phone_no: '',
@@ -239,7 +237,8 @@ const SignUpForm = props => {
 							</FormItem>
 
 							
-
+							{errorMessage && <Alert className="mb-4" type="danger"  showIcon>{errorMessage}</Alert>}
+							{successMessage && <Alert className="mb-4" type="success"  showIcon>{successMessage}</Alert>}
 							
 
 							<Button 
@@ -260,6 +259,7 @@ const SignUpForm = props => {
 					</Form>
 				)}
 			</Formik>
+			
 		</div>
 	)
 }

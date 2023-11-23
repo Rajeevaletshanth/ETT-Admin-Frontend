@@ -4,6 +4,7 @@ import appRoute from './appRoute'
 import leadsRoute from './leadsRoute'
 import verificationRoute from './verificationRoute'
 import { SUPERADMIN } from 'constants/roles.constant'
+import productRoute from './productRoute'
 
 export const publicRoutes = [
     ...authRoute,
@@ -17,6 +18,7 @@ export const publicRoutes = [
 
 export const protectedRoutes = [
     ...appRoute,
+    ...productRoute,
     ...leadsRoute,
     ...verificationRoute,
     {
@@ -24,12 +26,6 @@ export const protectedRoutes = [
         path: '/home',
         component: React.lazy(() => import('views/Home')),
         authority: [],
-    },
-    {
-        key: 'project',
-        path: '/project',
-        component: React.lazy(() => import('views/project')),
-        authority: [SUPERADMIN],
     },
     {
         key: 'access-denied',
